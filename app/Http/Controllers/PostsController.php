@@ -66,6 +66,8 @@ class PostsController extends Controller
             'content' => 'required|min:10'
         ]);
 
+        // Gracias al middleware SharErrorsFromSession, los errores presentes a lo largo de la sesión cuando la validación falla están siempre disponibles a traves de la variable errors en las plantillas de blade.
+
         // Para almacenar los datos primero necesitamos una nueva instancia del modelo igual a una variable $post. Hay que asegurarse de importar el modelo
         $post = new BlogPost();
         // Segundo asignar a  las propiedades, en este caso title y content la lectura de los input usando el método input del objeto request
