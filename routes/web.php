@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,14 +20,17 @@ use Illuminate\Support\Facades\Route;
 // })->name('home.index');
 
 // Las rutas que devuelven una vista sin pasar parámetros se pueden simplificar, el primer parámetro pasado a la vista el la ruta y el segundo el template. Esta ruta es equivalente a la anterior
-Route::view('/','home.index')->name('home.index');
+//Route::view('/','home.index')->name('home.index');
+
+// Si utilizamos controlador cambia la forma de indicar la ruta, utilizamos get u otro verbo que recibe como primer parametro la ruta y como segundo parámetro un array cuyo primer valor es el nombre del controlador indicando la constante class y como segundo valor se indica el nombre del método. El name se construye igual. Es importante no olvidarse de importar la ruta del controlador
+Route::get('/', [HomeController::class, 'home'])->name('home.index');
 
 // Route::get('/contact', function(){
 //     return view('home.contact');
 // })->name('home.contact');
 
-Route::view('/contact','home.contact')->name('home.contact');
-
+//Route::view('/contact','home.contact')->name('home.contact');
+Route::get('/contact', [HomeController::class, 'contact'])->name('home.contact');
 
 $posts = [
     1 => [
