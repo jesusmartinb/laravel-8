@@ -60,7 +60,15 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        // Para almacenar los datos primero necesitamos una nueva instancia del modelo igual a una variable $post. Hay que asegurarse de importar el modelo
+        $post = new BlogPost();
+        // Segundo asignar a  las propiedades, en este caso title y content la lectura de los input usando el método input del objeto request
+        $post->title = $request->input('title');
+        $post->content = $request->input('content');
+        // llamamos al método save() del objeto modelo para registrar el nuevo registro en la BD
+        $post->save();
+        // podemos mostrar un mensaje de exito o redirigir a otra página, en este caso redirigimos para mostrar el mismo registro insertado pasando el valor del campo id al método route() pasado como un segundo parámetro
+        return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
     /**
