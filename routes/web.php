@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -55,29 +56,33 @@ $posts = [
     ]
 ];
 
-// Ademas de los parámetros de Route se pueden aceptar entradas arbitrarias como los parámetros de consulta enviados a traves de un formulario HTML o una interfaz y formato de solicitud. Antes de hablar de los formularios y enviar json, veamos un ejemplo de consulta simple con parámetros en la url.
-Route::get('/posts', function() use($posts) {
-    // Las entradas son accesibles mediante los métodos del objeto request, pero como accedemos al objeto request? Hay dos formas usando la función request o escribiendo un argumento con el request "Request $request" que debe ser importado de Illuminate\Http ambas formas son correctas. Usaremos la función.
-    // dd(request()->all('page', 1)); // Con el método all() tenemos acceso a todas las entradas pero no da acceso a los parámetros del route si existen. Podemos usar la funcion dd() "dump and die" para ver la entrada disponible volcando los datos rapidamente en pantalla y deteniendo la ejecución.Podemos probarlo limit y page /posts?limit=10&page=5. Se devuelve una matriz y podemos recuperar los campos individuales con el método input() del objeto request()
-    // dd((int)request()->input('page', 1)); // el método input permite especificar un valor por defecto en la solicitud usando el segundo parámetro.
-    // Hay un métod de consulta especial si desea obtener el valor de solo un parámetro de consulta
-    dd((int)request()->query('page', 1));
-    // El método input() buscará los nombres en todas los posibles entradas (query parameters, data center, formularios o json) mientras que la función query() es especificamente solo para query parameters.
-    // compact($posts) equivale a ['posts' => $posts]
-    return view('posts.index', ['posts' => $posts]);
-})->name('posts.index');
+// Definiendo la ruta para un controlador de tipo resource, Posts. En caso de no necesitar todos los métodos de un recurso se pueden especificar solo los que se necesitan con only que contendra un array con los métodos necesarios. Otra opción si se quieren utilizar la mayoria de losmétodos es indicar los que no deseamos con except() contendra un array con los metodos que no deseamos
+Route::resource('posts', PostsController::class)->only(['index', 'show']);
+// Route::resource('posts', PostsController::class)->except(['index', 'show']);
 
-// Pasando parametros a la ruta parametros obligatorios y restricciones que también se pueden indicar en el fichero RouteServiceProvider.php línea 40 y no es necesario el where
-Route::get('posts/{id}', function ($id) use ($posts) {
-    // Si el parámetro pasado no existe se aborta la operación con un error 404 not found
-    abort_if(!isset($posts[$id]), 404);
-    // Pasando datos a un template para renderizarlos
-    return view('posts.show', ['post' => $posts[$id]]);
-})
-    // ->where([
-    //     'id' => '[0-9]+'
-    // ])
-    ->name('posts.show');
+// Ademas de los parámetros de Route se pueden aceptar entradas arbitrarias como los parámetros de consulta enviados a traves de un formulario HTML o una interfaz y formato de solicitud. Antes de hablar de los formularios y enviar json, veamos un ejemplo de consulta simple con parámetros en la url.
+// Route::get('/posts', function() use($posts) {
+//     // Las entradas son accesibles mediante los métodos del objeto request, pero como accedemos al objeto request? Hay dos formas usando la función request o escribiendo un argumento con el request "Request $request" que debe ser importado de Illuminate\Http ambas formas son correctas. Usaremos la función.
+//     // dd(request()->all('page', 1)); // Con el método all() tenemos acceso a todas las entradas pero no da acceso a los parámetros del route si existen. Podemos usar la funcion dd() "dump and die" para ver la entrada disponible volcando los datos rapidamente en pantalla y deteniendo la ejecución.Podemos probarlo limit y page /posts?limit=10&page=5. Se devuelve una matriz y podemos recuperar los campos individuales con el método input() del objeto request()
+//     // dd((int)request()->input('page', 1)); // el método input permite especificar un valor por defecto en la solicitud usando el segundo parámetro.
+//     // Hay un métod de consulta especial si desea obtener el valor de solo un parámetro de consulta
+//     dd((int)request()->query('page', 1));
+//     // El método input() buscará los nombres en todas los posibles entradas (query parameters, data center, formularios o json) mientras que la función query() es especificamente solo para query parameters.
+//     // compact($posts) equivale a ['posts' => $posts]
+//     return view('posts.index', ['posts' => $posts]);
+// })->name('posts.index');
+
+// // Pasando parametros a la ruta parametros obligatorios y restricciones que también se pueden indicar en el fichero RouteServiceProvider.php línea 40 y no es necesario el where
+// Route::get('posts/{id}', function ($id) use ($posts) {
+//     // Si el parámetro pasado no existe se aborta la operación con un error 404 not found
+//     abort_if(!isset($posts[$id]), 404);
+//     // Pasando datos a un template para renderizarlos
+//     return view('posts.show', ['post' => $posts[$id]]);
+// })
+//     // ->where([
+//     //     'id' => '[0-9]+'
+//     // ])
+//     ->name('posts.show');
 
 //Pasando parámetros opcionales
 Route::get('/recent-posts/{days_ago?}', function($daysAgo = 20){
