@@ -60,6 +60,12 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
+        // Necesitamos estar seguros que las entradas pueden cumplir con ciertas restricciones como la necesidad de tener una longitud determinada, ser de un tipo concreto como un número o estar presente. La validación de los datos de entrada es facil y muy conveniente. El objeto request utiliza el método validate(). Hay muchas reglas de validación. El método validate acepta un array donde la clave es la propiedad del input a validar y el valor es una colección de reglas de validación. Las reglas de validación serán un string con las reglas separadas por un caracter pipe | o un array de reglas. Es normal tener más de una regla de validación en una única propiedad, pero si se prefiere utilizar solo la primera y evitar que el resto de las reglas de un campo se ejecuten debemos introducir la regla "bail" en primer lugar.
+        $request->validate([
+            'title' => 'bail|required|min:5|max:100',
+            'content' => 'required|min:10'
+        ]);
+
         // Para almacenar los datos primero necesitamos una nueva instancia del modelo igual a una variable $post. Hay que asegurarse de importar el modelo
         $post = new BlogPost();
         // Segundo asignar a  las propiedades, en este caso title y content la lectura de los input usando el método input del objeto request
