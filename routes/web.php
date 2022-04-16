@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,9 @@ Route::get('/', [HomeController::class, 'home'])->name('home.index');
 
 //Route::view('/contact','home.contact')->name('home.contact');
 Route::get('/contact', [HomeController::class, 'contact'])->name('home.contact');
+
+// Para controladores de una única acción "Single Action Controller" no es necesario indicar un array con el nombre del controlador y el método, tan solo se indica NameController::class sin array y sin nombre de método, es auto invocado (método __invoke() del controlador)
+Route::get('/single', AboutController::class);
 
 $posts = [
     1 => [
