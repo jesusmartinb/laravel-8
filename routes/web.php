@@ -57,7 +57,8 @@ $posts = [
 ];
 
 // Definiendo la ruta para un controlador de tipo resource, Posts. En caso de no necesitar todos los métodos de un recurso se pueden especificar solo los que se necesitan con only que contendra un array con los métodos necesarios. Otra opción si se quieren utilizar la mayoria de losmétodos es indicar los que no deseamos con except() contendra un array con los metodos que no deseamos
-Route::resource('posts', PostsController::class)->only(['index', 'show']);
+Route::resource('posts', PostsController::class)
+    ->only(['index', 'show', 'create', 'store']);
 // Route::resource('posts', PostsController::class)->except(['index', 'show']);
 
 // Ademas de los parámetros de Route se pueden aceptar entradas arbitrarias como los parámetros de consulta enviados a traves de un formulario HTML o una interfaz y formato de solicitud. Antes de hablar de los formularios y enviar json, veamos un ejemplo de consulta simple con parámetros en la url.
